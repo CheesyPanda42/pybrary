@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config label='menus'>
+	<menubar>
+		<menu label="File">
+			<item label="New">
+				<command>newItem</command>
+				<tooltip>"Create new item"</tooltip>
+			</item>
+			<item label="Quit">
+				<command>_quit</command>
+				<tooltip>"Quit program"</tooltip>
+			</item>
+		</menu>
+
+		<menu label="Options">
+		</menu>
+
+		<menu label="Help">
+		</menu>
+	</menubar>
+
+	<tablist>
+		<tab label="Games"></tab>
+		<tab label="Books"></tab>
+		<tab label="Video"></tab>
+	</tablist>
+
+	<treeview>
+	</treeview>
+</config>
