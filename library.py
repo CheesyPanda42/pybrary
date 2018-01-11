@@ -89,8 +89,9 @@ def main():
 	win = PybraryGUI()
 	win.setupGUI()
 
-	datafile = open('humbleoutput.txt','r')
-	data = datafile.read().split('\n')
+	datafile = open('humbleoutput.txt','rb')
+	data = datafile.read().decode().split('\n')
+
 	#print(data)
 	for child in win.tabRefList[0].winfo_children()[0].winfo_children():
 		print(child)
