@@ -27,12 +27,20 @@
 
 	<treeview>
 		<tab label ="Books">
-			<header label="Title"></header>
-			<header label='Author'></header>
+			<heading label="Title"></heading>
+			<heading label='Author'></heading>
 		</tab>
 		<tab label ="Games">
-			<header label="Title"></header>
-			<header label='Platform'></header>
+			<heading label="Title"></heading>
+			<heading label='Platform'></heading>
+		</tab>
+		<tab label ="Video">
+			<heading lable="Title"></heading>
 		</tab>
 	</treeview>
+
+	<source>
+		<file path="">HumbleBundleInput</file>
+		<file path="">AmazonInput</file>
+	</source>
 </config>

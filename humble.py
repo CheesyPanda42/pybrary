@@ -5,7 +5,7 @@ import json
 
 f = open("humbleoutput.txt", 'rb')
 content = f.read().decode()
-o = open('output', 'wb')
+o = open('humble.txt', 'wb')
 
 m = '-{26}\r?\n?Item \\d+\n?-{26}\r?\n?'
 
@@ -26,13 +26,21 @@ for p in productlist:
 	author = p[1]
 	platform =p[2]
 	key = "\w?key\w?"
-	steam = "\w?Steam \w?key\w?"
+	steam = "\w?Steam.*(key)?\w?"
 	origin = "\w?Origin \w?key\w?"
+	print(p)
 	if re.search(steam, platform, flags=re.IGNORECASE):
 		platform = "Steam"
 	elif re.search(origin, platform, flags=re.IGNORECASE):
 		platform = "Origin"
 	elif re.search(key, platform, flags=re.IGNORECASE):
+		platform = "Key"
+
+	if re.search(steam, author, flags=re.IGNORECASE):
+		platform = "Steam"
+	elif re.search(origin, author, flags=re.IGNORECASE):
+		platform = "Origin"
+	elif re.search(key, author, flags=re.IGNORECASE):
 		platform = "Key"
 
 	if author in authorList:

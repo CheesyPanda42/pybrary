@@ -9,6 +9,7 @@ from tkinter import Listbox
 from tkinter.ttk import Treeview
 from tkinter import Scrollbar
 from tkinter import messagebox as msg
+from threading import Thread
 import re
 #import xml.etree.ElementTree as ET
 parser = ET.XMLParser(remove_blank_text=True)
@@ -57,12 +58,30 @@ class PybraryGUI():
 
 
 	def setupWidgets(self):
+		self.setupTreeView()
+
+	def setupTreeView(self):
 		#probably want treeview, not listbox
 		scr_w = 180
 		scr_h = 10
+
+		treeviewConfig = configRoot.findall('treeview')
+		self.headingList = []
+		self.tabLabelList = []
+		self.headingList =[]
+
+
+
+
 		for tab in self.tabControl.winfo_children():
 			# listbox = Listbox(tab, width = 120)
 			# listbox.grid(column = 0, row = 0, padx = 20, pady = 10)
+			tabText = self.tabControl.tab(tab)['text']
+
+
+
+
+
 			treeview = Treeview(tab)
 			treeview['columns'] = ('Title', 'Author', 'Platform')
 			treeview.heading("#0", text = "ID")
@@ -121,7 +140,7 @@ def main():
 	win = PybraryGUI()
 	win.setupGUI()
 
-	datafile = open('output','rb')
+	datafile = open('humble.txt','rb')
 	data = datafile.read().decode().split('\n')
 	scrolltext =  win.tabRefList[0].winfo_children()[0]
 	tree = win.tabRefList[0].winfo_children()[0]
@@ -145,7 +164,7 @@ def main():
 		tree.insert('', 'end', text=_id, values=(d[0],d[1],d[2]))
 		_id += 1
 
-	win.window.mainloop()
+	#win.window.mainloop()
 
 if __name__ == '__main__':
 	main()
