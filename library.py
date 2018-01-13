@@ -53,7 +53,7 @@ class PybraryGUI():
 			tab = ttk.Frame(self.tabControl)
 			self.tabRefList.append(tab)
 			self.tabControl.add(tab, text = t.attrib['label'])
-		self.tabControl.pack(expand = 1, fill = 'both')
+		self.tabControl.pack(expand = True, fill = tk.BOTH)
 
 
 	def setupWidgets(self):
@@ -65,15 +65,20 @@ class PybraryGUI():
 			# listbox.grid(column = 0, row = 0, padx = 20, pady = 10)
 			treeview = Treeview(tab)
 			treeview['columns'] = ('Title', 'Author', 'Platform')
+			treeview.heading("#0", text = "ID")
+			treeview.column('#0', minwidth=50, width=50, stretch=False)
 			treeview.heading('Title', text = "Title")
 			treeview.heading('Author', text = "Author")
 			treeview.heading('Platform', text = "Platform")
-			treeview.grid(column = 0, row =0, sticky="NS", )
+			treeview.grid(column = 0, row =0, sticky="NSEW", )
 			treeview.bind("<Double-1>", self.itemSelected)
+			treeview.config(height=25)
+			
 			scrollbar = Scrollbar(tab)
 			scrollbar.grid(column=1, row=0, sticky="NS")
 			treeview.config(yscrollcommand = scrollbar.set)
 			scrollbar.config(command=treeview.yview)
+		#treeCol = self.tabRefList[0].winfo_children()[0].column('#0', minwidth=50, width=50, stretch=False)
 
 
 
