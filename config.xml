@@ -26,5 +26,8 @@
 	</tablist>
 
 	<treeview>
+		<header label="Title"></header>
+		<header label='Platform'></header>
+		<header label='Author'></header>
 	</treeview>
 </config>

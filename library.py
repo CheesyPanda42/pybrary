@@ -7,6 +7,8 @@ from tkinter import Menu
 from tkinter import scrolledtext as scroll
 from tkinter import Listbox
 from tkinter.ttk import Treeview
+import re
+from tkinter import messagebox as msg
 
 #import xml.etree.ElementTree as ET
 parser = ET.XMLParser(remove_blank_text=True)
@@ -43,7 +45,7 @@ class PybraryGUI():
 			self.menu_bar.add_cascade(label = m.attrib['label'], menu = menu)
 
 	def setupTabs(self):
-		print("Tabs")
+		print("Setting up tabs")
 		self.tabControl = ttk.Notebook(self.window)
 		tablist = configRoot.findall('tablist/tab')
 		self.tabRefList = []
@@ -53,26 +55,29 @@ class PybraryGUI():
 			self.tabControl.add(tab, text = t.attrib['label'])
 		self.tabControl.pack(expand = 1, fill = 'both')
 
-		#for tab in self.tabRefList:
-		#	labelFrame = ttk.LabelFrame(tab)
-		#	labelFrame.config(text = self.tabControl.tab(labelFrame.winfo_parent())['text'])
-		#	labelFrame.grid(column = 0, row = 0, padx = 8, pady = 4)
-
 
 	def setupWidgets(self):
 		#probably want treeview, not listbox
 		scr_w = 180
 		scr_h = 10
 		for tab in self.tabControl.winfo_children():
-			#scr = scroll.ScrolledText(tab, width = scr_w, height = scr_h, wrap = tk.WORD)
-			listbox = Listbox(tab, width = 120)
-			listbox.grid(column = 0, row = 0, padx = 20, pady = 10)
-			#print(scr.winfo_parent())
-
+			# listbox = Listbox(tab, width = 120)
+			# listbox.grid(column = 0, row = 0, padx = 20, pady = 10)
 			treeview = Treeview(tab)
-			treeview['columns'] = ('Title', 'Author')
+			treeview['columns'] = ('Title', 'Author', 'Platform')
 			treeview.heading('Title', text = "Title")
-			treeview.grid(column = 0, row =1)
+			treeview.heading('Author', text = "Author")
+			treeview.heading('Platform', text = "Platform")
+			treeview.grid(column = 0, row =0)
+			treeview.bind("<Double-1>", self.itemSelected)
+
+
+	def itemSelected(self, event):
+		print(event.widget)
+		#item = self.tabRefList[0].winfo_children()[0].selection()
+		item = event.widget.selection()
+		value = event.widget.item(item, "values")
+		msg.showinfo("Item Selected", "Title: {0}\nAuthor: {1}\nPlatform: {2} ".format(value[0], value[1], value[2]))
 
 
 	def newItem(self):
@@ -84,27 +89,40 @@ class PybraryGUI():
 		self.window.destroy()
 		exit()
 
+def parseData(data):
+	lines = "____________________________"
+	parsedData = []
+	itemData = []
+	for d in data:
+		if d == lines:
+			itemData.clear()
+		elif re.search("Title:", d):
+			itemData.append(d.split(':')[1])
+		elif re.search("Author:", d):
+			itemData.append(d.split(':')[1])
+		elif re.search("Platform:", d):
+			itemData.append(d.split(':')[1])
+			parsedData.append(itemData.copy())
+	return parsedData
+
 
 def main():
 	win = PybraryGUI()
 	win.setupGUI()
 
-	datafile = open('humbleoutput.txt','rb')
+	datafile = open('output','rb')
 	data = datafile.read().decode().split('\n')
-
-	#print(data)
-	for child in win.tabRefList[0].winfo_children()[0].winfo_children():
-		print(child)
-
 	scrolltext =  win.tabRefList[0].winfo_children()[0]
-	tree = win.tabRefList[0].winfo_children()[1]
-	print(scrolltext)
-	print(tree)
-	for d in data:
-		scrolltext.insert(tk.END, d + '\n')
-		tree.insert('', 'end', text="", values=(d,""))
-	win.window.mainloop()
+	tree = win.tabRefList[0].winfo_children()[0]
+	_id = 0
 
+	parsedData = parseData(data)
+
+	for d in parsedData:
+		tree.insert('', 'end', text=_id, values=(d[0],d[1],d[2]))
+		_id += 1
+
+	win.window.mainloop()
 
 if __name__ == '__main__':
 	main()

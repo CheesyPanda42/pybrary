@@ -3,21 +3,69 @@ import requests
 import re
 import json
 
-f = open("humblehtml.html", "rb")
-result = open("humbleoutput.txt", "wb")
-content = f.read()
-tree = html.fromstring(content)
+f = open("humbleoutput.txt", 'rb')
+content = f.read().decode()
+o = open('output', 'wb')
 
-titles = tree.xpath('//h2/text()')
-for title in titles:
-	result.write(b"%s\n" % str(title).encode('utf-8'))
-	print(title)
+m = '-{26}\r?\n?Item \\d+\n?-{26}\r?\n?'
+
+contentlist = re.split(m,content)
+#print(contentlist)
+productlist = []
+authorList = {}
+platformList = {}
+
+for prod in contentlist:
+	x = prod.strip('\r\n').split('\n')
+	x.remove('')
+	productlist.append(x[1:])
+
+del(productlist[0])
+for p in productlist:
+	title = p[0]
+	author = p[1]
+	platform =p[2]
+	key = "\w?key\w?"
+	steam = "\w?Steam \w?key\w?"
+	origin = "\w?Origin \w?key\w?"
+	if re.search(steam, platform, flags=re.IGNORECASE):
+		platform = "Steam"
+	elif re.search(origin, platform, flags=re.IGNORECASE):
+		platform = "Origin"
+	elif re.search(key, platform, flags=re.IGNORECASE):
+		platform = "Key"
+
+	if author in authorList:
+		authorList[author] += 1
+	else:
+		authorList[author] = 1
+	if platform in platformList:
+		platformList[platform] += 1
+	else:
+		platformList[platform] = 1
+	#print("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform))
+	o.write("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform).encode('utf-8'))
+
+#print (authorList)
+# for a in authorList:
+# 	x = a + "; " + str(authorList[a]) + "\n"
+# 	o.write(x.encode('utf-8'))
+# o.write("\n\n".encode('utf-8'))
+# #print (platformList)
+# for p in platformList:
+# 	x = p + "; " + str(platformList[p]) + "\n"
+# 	o.write(x.encode('utf-8'))
 
 
+# f = open("humblehtml.html", "rb")
+# result = open("humbleoutput.txt", "wb")
+# content = f.read()
+# tree = html.fromstring(content)
 
-
-
-
+# titles = tree.xpath('//h2/text()')
+# for title in titles:
+# 	result.write(b"%s\n" % str(title).encode('utf-8'))
+# 	print(title)
 
 # url = "https://hr-humblebundle.appspot.com/processlogin"
 
