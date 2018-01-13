@@ -26,8 +26,13 @@
 	</tablist>
 
 	<treeview>
-		<header label="Title"></header>
-		<header label='Platform'></header>
-		<header label='Author'></header>
+		<tab label ="Books">
+			<header label="Title"></header>
+			<header label='Author'></header>
+		</tab>
+		<tab label ="Games">
+			<header label="Title"></header>
+			<header label='Platform'></header>
+		</tab>
 	</treeview>
 </config>

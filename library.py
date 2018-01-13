@@ -7,9 +7,9 @@ from tkinter import Menu
 from tkinter import scrolledtext as scroll
 from tkinter import Listbox
 from tkinter.ttk import Treeview
-import re
+from tkinter import Scrollbar
 from tkinter import messagebox as msg
-
+import re
 #import xml.etree.ElementTree as ET
 parser = ET.XMLParser(remove_blank_text=True)
 configTree = ET.parse('config.xml', parser = parser)
@@ -20,7 +20,7 @@ class PybraryGUI():
 		# create window
 		self.window = tk.Tk()
 		self.window.title("Pybrary")
-		self.window.minsize(width = 300, height = 300)
+		self.window.minsize(width = 600, height = 600)
 
 	def setupGUI(self):
 		self.setupMenu()
@@ -68,8 +68,14 @@ class PybraryGUI():
 			treeview.heading('Title', text = "Title")
 			treeview.heading('Author', text = "Author")
 			treeview.heading('Platform', text = "Platform")
-			treeview.grid(column = 0, row =0)
+			treeview.grid(column = 0, row =0, sticky="NS", )
 			treeview.bind("<Double-1>", self.itemSelected)
+			scrollbar = Scrollbar(tab)
+			scrollbar.grid(column=1, row=0, sticky="NS")
+			treeview.config(yscrollcommand = scrollbar.set)
+			scrollbar.config(command=treeview.yview)
+
+
 
 
 	def itemSelected(self, event):
@@ -77,8 +83,9 @@ class PybraryGUI():
 		#item = self.tabRefList[0].winfo_children()[0].selection()
 		item = event.widget.selection()
 		value = event.widget.item(item, "values")
-		msg.showinfo("Item Selected", "Title: {0}\nAuthor: {1}\nPlatform: {2} ".format(value[0], value[1], value[2]))
-
+		#msg.showinfo("Item Selected", "Title: {0}\nAuthor: {1}\nPlatform: {2} ".format(value[0], value[1], value[2]))
+		import websearch
+		websearch.google(value[0])
 
 	def newItem(self):
 		print("New item")
@@ -90,19 +97,18 @@ class PybraryGUI():
 		exit()
 
 def parseData(data):
-	lines = "____________________________"
+	# lines = "____________________________"
 	parsedData = []
-	itemData = []
+	itemData = ['','','']
 	for d in data:
-		if d == lines:
-			itemData.clear()
-		elif re.search("Title:", d):
-			itemData.append(d.split(':')[1])
-		elif re.search("Author:", d):
-			itemData.append(d.split(':')[1])
-		elif re.search("Platform:", d):
-			itemData.append(d.split(':')[1])
-			parsedData.append(itemData.copy())
+		temp = d.split(';')
+		#print(temp)
+		if(temp[0] == ''):
+			continue
+		itemData[0] = temp[0]
+		itemData[1] = temp[1]
+		itemData[2] = temp[2]
+		parsedData.append(itemData.copy())
 	return parsedData
 
 
@@ -111,6 +117,18 @@ def main():
 	win.setupGUI()
 
 	datafile = open('output','rb')
+	data = datafile.read().decode().split('\n')
+	scrolltext =  win.tabRefList[0].winfo_children()[0]
+	tree = win.tabRefList[0].winfo_children()[0]
+	_id = 0
+
+	parsedData = parseData(data)
+
+	for d in parsedData:
+		tree.insert('', 'end', text=_id, values=(d[0],d[1],d[2]))
+		_id += 1
+
+	datafile = open('kindleoutput.txt','rb')
 	data = datafile.read().decode().split('\n')
 	scrolltext =  win.tabRefList[0].winfo_children()[0]
 	tree = win.tabRefList[0].winfo_children()[0]

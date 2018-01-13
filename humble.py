@@ -44,7 +44,8 @@ for p in productlist:
 	else:
 		platformList[platform] = 1
 	#print("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform))
-	o.write("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform).encode('utf-8'))
+	#o.write("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform).encode('utf-8'))
+	o.write("{0};{1};{2}\n".format(title,author,platform).encode('utf-8'))
 
 #print (authorList)
 # for a in authorList:
