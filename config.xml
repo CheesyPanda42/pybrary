@@ -23,6 +23,7 @@
 		<tab label="Software"></tab>
 		<tab label="Books"></tab>
 		<tab label="Video"></tab>
+		<tab label="Other"></tab>
 	</tablist>
 
 	<treeview>
@@ -35,6 +36,9 @@
 			<heading label='Platform'></heading>
 		</tab>
 		<tab label ="Video">
+			<heading label="Title"></heading>
+		</tab>
+		<tab label ="Other">
 			<heading label="Title"></heading>
 		</tab>
 	</treeview>

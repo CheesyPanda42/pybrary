@@ -129,18 +129,17 @@ class PybraryGUI():
 		exit()
 
 def parseData(data):
-	# lines = "____________________________"
 	parsedData = []
 	itemData = ['','','']
+	
 	for d in data:
 		temp = d.split(';')
-		#print(temp)
-		if(temp[0] == ''):
-			continue
-		itemData[0] = temp[0]
-		itemData[1] = temp[1]
-		itemData[2] = temp[2]
-		parsedData.append(itemData.copy())
+		# if(temp[0] == ''):
+		# 	continue
+		# itemData[0] = temp[0]
+		# itemData[1] = temp[1]
+		# itemData[2] = temp[2]
+		# parsedData.append(itemData.copy())
 	return parsedData
 
 

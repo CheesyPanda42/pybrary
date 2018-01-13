@@ -14,6 +14,9 @@ contentlist = re.split(m,content)
 productlist = []
 authorList = {}
 platformList = {}
+softwarelist = ["Steam", "Origin", "Key"]
+bookList = ["eBook"]
+videoList = ["Video"]
 
 for prod in contentlist:
 	x = prod.strip('\r\n').split('\n')
@@ -22,13 +25,14 @@ for prod in contentlist:
 
 del(productlist[0])
 for p in productlist:
-	title = p[0]
-	author = p[1]
-	platform =p[2]
+	title = p[0].strip(' ')
+	author = p[1].strip(' ')
+	platform = p[2].strip(' ')
+	category = ''
 	key = "\w?key\w?"
 	steam = "\w?Steam.*(key)?\w?"
 	origin = "\w?Origin \w?key\w?"
-	print(p)
+	#print(p)
 	if re.search(steam, platform, flags=re.IGNORECASE):
 		platform = "Steam"
 	elif re.search(origin, platform, flags=re.IGNORECASE):
@@ -51,9 +55,20 @@ for p in productlist:
 		platformList[platform] += 1
 	else:
 		platformList[platform] = 1
+
+	if platform in platformList:
+		category = "Software"
+	elif platform in videoList:
+		category = "Video"
+	elif platform in bookList:
+		category = "Books"
+	else:
+		category = "Other"
+
+
 	#print("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform))
 	#o.write("____________________________\nTitle: {0}\nAuthor:{1}\nPlatform:{2}\n____________________________\n".format(title,author,platform).encode('utf-8'))
-	o.write("{0};{1};{2}\n".format(title,author,platform).encode('utf-8'))
+	o.write("{0};{1};{2};{3}\n".format(title,author,platform,category).encode('utf-8'))
 
 #print (authorList)
 # for a in authorList:
