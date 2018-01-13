@@ -20,7 +20,7 @@
 	</menubar>
 
 	<tablist>
-		<tab label="Games"></tab>
+		<tab label="Software"></tab>
 		<tab label="Books"></tab>
 		<tab label="Video"></tab>
 	</tablist>
@@ -30,12 +30,12 @@
 			<heading label="Title"></heading>
 			<heading label='Author'></heading>
 		</tab>
-		<tab label ="Games">
+		<tab label ="Software">
 			<heading label="Title"></heading>
 			<heading label='Platform'></heading>
 		</tab>
 		<tab label ="Video">
-			<heading lable="Title"></heading>
+			<heading label="Title"></heading>
 		</tab>
 	</treeview>
 

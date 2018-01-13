@@ -65,14 +65,22 @@ class PybraryGUI():
 		scr_w = 180
 		scr_h = 10
 
-		treeviewConfig = configRoot.findall('treeview')
-		self.headingList = []
+		tabConfig = configRoot.findall('treeview/tab')
 		self.tabLabelList = []
-		self.headingList =[]
+		self.headingDict ={}
 
 
+		for t in tabConfig:
+			tabName = t.attrib['label']
+			self.tabLabelList.append(tabName)
+			headingConfig = t.findall('heading')
+			temp = []
+			for h in headingConfig:
+				temp.append(h.attrib['label'])
+				self.headingDict[tabName] = temp.copy()
+			temp.clear()
 
-
+		print(self.headingDict)
 		for tab in self.tabControl.winfo_children():
 			# listbox = Listbox(tab, width = 120)
 			# listbox.grid(column = 0, row = 0, padx = 20, pady = 10)
@@ -81,14 +89,14 @@ class PybraryGUI():
 
 
 
-
 			treeview = Treeview(tab)
-			treeview['columns'] = ('Title', 'Author', 'Platform')
+			#treeview['columns'] = ('Title', 'Author', 'Platform')
+			treeview['columns'] = self.headingDict[tabText]
 			treeview.heading("#0", text = "ID")
 			treeview.column('#0', minwidth=50, width=50, stretch=False)
-			treeview.heading('Title', text = "Title")
-			treeview.heading('Author', text = "Author")
-			treeview.heading('Platform', text = "Platform")
+			for h in treeview['columns']:
+				print(h)
+				treeview.heading(h, text = h)
 			treeview.grid(column = 0, row =0, sticky="NSEW", )
 			treeview.bind("<Double-1>", self.itemSelected)
 			treeview.config(height=25)
@@ -139,7 +147,7 @@ def parseData(data):
 def main():
 	win = PybraryGUI()
 	win.setupGUI()
-
+	filelist = ['humble.txt', 'kindleoutput.txt']
 	datafile = open('humble.txt','rb')
 	data = datafile.read().decode().split('\n')
 	scrolltext =  win.tabRefList[0].winfo_children()[0]
@@ -164,7 +172,7 @@ def main():
 		tree.insert('', 'end', text=_id, values=(d[0],d[1],d[2]))
 		_id += 1
 
-	#win.window.mainloop()
+	win.window.mainloop()
 
 if __name__ == '__main__':
 	main()
